@@ -17,5 +17,5 @@ O Exercicio foi Dividido em 3 Arquivos
   python -m flask run
 
 - requirements.txt
-  importçoes do ambiente virtual
+  importações do ambiente virtual
   
