@@ -1,6 +1,6 @@
 from unittest import TestCase
 from aluguel import Aluguel
-
+import csv
 
 class AluguelTeste(TestCase):
     def teste_dez(self):
@@ -51,3 +51,45 @@ class AluguelTeste(TestCase):
         aluguel = Aluguel()
         aluguel.dia = 0
         self.assertEqual({"valor_calculado": -1}, aluguel.custo)
+
+
+class TesteCsv(TestCase):
+
+    def modelo(self, lista):
+        aluguel = Aluguel()
+        l = list(csv.reader(lista))
+        aluguel.dia = int(l[1][0])
+        resultado = float(l[0][1])
+        self.assertEqual({"valor_calculado": resultado}, aluguel.custo)
+        aluguel.dia = int(l[1][1])
+        aluguel.valor = int(l[0][0])
+        self.assertEqual({"valor_calculado": resultado}, aluguel.custo)
+        aluguel.dia = int(l[1][2])
+        aluguel.valor = int(l[0][0])
+        self.assertEqual({"valor_calculado": resultado}, aluguel.custo)
+
+    def teste_dez_csv(self):
+        self.modelo(["500,450.0", "1,2,5"])
+    def teste_cinco(self):
+        aluguel = Aluguel()
+        self.modelo(["500,475.0", "6,7,10"])
+    def teste_normal(self):
+        self.modelo(["500,500", "11,12,15"])
+    def teste_multa(self):
+        aluguel = Aluguel()
+        aluguel = Aluguel()
+        lista = ["500,510.5,513.5,517.5", "16,22,30"]
+        l = list(csv.reader(lista))
+        aluguel.dia = int(l[1][0])
+        resultado = float(l[0][1])
+        self.assertEqual({"valor_calculado": resultado}, aluguel.custo)
+        aluguel.valor = int(l[0][0])
+        aluguel.dia = int(l[1][1])
+        resultado = float(l[0][2])
+        self.assertEqual({"valor_calculado": resultado}, aluguel.custo)
+        aluguel.valor = int(l[0][0])
+        aluguel.dia = int(l[1][2])
+        resultado = float(l[0][3])
+        self.assertEqual({"valor_calculado": resultado}, aluguel.custo)
+    def teste_invalido(self):
+        self.modelo(["500,-1","31,0,-1"])
