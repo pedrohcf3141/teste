@@ -132,6 +132,7 @@ class TesteSeleniun(TestCase):
     def test_normal_selenium(self):
         self.modelo(11)
         self.modelo(12)
+   # teste no dia 15 apresenta 450 mas segundo o exercicio anterior deveria ser 500
         self.modelo(15)
     def test_multa_selenium(self):
         self.modelo(16)
@@ -140,4 +141,5 @@ class TesteSeleniun(TestCase):
     def test_invalido_selenium(self):
         self.modelo(31)
         self.modelo(-1)
+    # teste no dia 0 apresenta 450 mas segundo o exercicio anterior deveria ser -1
         self.modelo(0)
