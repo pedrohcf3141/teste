@@ -1,6 +1,8 @@
 from unittest import TestCase
 from aluguel import Aluguel
 import csv
+from selenium.webdriver import Chrome
+from time import sleep
 
 class AluguelTeste(TestCase):
     def teste_dez(self):
@@ -93,3 +95,49 @@ class TesteCsv(TestCase):
         self.assertEqual({"valor_calculado": resultado}, aluguel.custo)
     def teste_invalido(self):
         self.modelo(["500,-1","31,0,-1"])
+
+class TesteSeleniun(TestCase):
+
+    def modelo(self, d):
+
+        browser = Chrome()
+        url = 'https://aluguebug.herokuapp.com/form'
+        browser.get(url)
+        dia = browser.find_element_by_id("dia")
+        v_nominal = browser.find_element_by_id('valor_nominal')
+
+        botao = browser.find_element_by_id('botao')
+
+        dia.send_keys(d)
+        v_nominal.send_keys(500)
+        botao.click()
+        sleep(2)
+        v_calculado = browser.find_element_by_id('resposta')
+        resposta = v_calculado.get_attribute("value")
+        browser.quit()
+
+        aluguel = Aluguel()
+        aluguel.dia = d
+        resultado = float(resposta)
+        self.assertEqual({"valor_calculado": resultado}, aluguel.custo)
+
+    def teste_dez_selenium(self):
+        self.modelo(1)
+        self.modelo(2)
+        self.modelo(5)
+    def test_cinco_selenium(self):
+        self.modelo(6)
+        self.modelo(7)
+        self.modelo(10)
+    def test_normal_selenium(self):
+        self.modelo(11)
+        self.modelo(12)
+        self.modelo(15)
+    def test_multa_selenium(self):
+        self.modelo(16)
+        self.modelo(22)
+        self.modelo(30)
+    def test_invalido_selenium(self):
+        self.modelo(31)
+        self.modelo(-1)
+        self.modelo(0)
